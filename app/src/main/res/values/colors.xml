@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="translucentBackground">#72000000</color>
+    <color name="progressBar">#3f51b5</color>
+    <color name="box_rectangle_background">#6e6868</color>
+</resources>
