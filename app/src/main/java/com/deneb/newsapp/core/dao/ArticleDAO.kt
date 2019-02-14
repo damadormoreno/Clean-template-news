@@ -1,21 +1,22 @@
 package com.deneb.newsapp.core.dao
 
 import android.arch.persistence.room.*
+import com.deneb.newsapp.features.news.ArticleEntity
 
 @Dao
 interface ArticleDAO {
-/*    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertEvent(eventEntity: EventEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertArticle(articleEntity: ArticleEntity)
 
     @Update
-    fun updateEvent(eventEntity: EventEntity)
+    fun updateEvent(articleEntity: ArticleEntity)
 
     @Delete
-    fun deleteEvent(eventEntity: EventEntity)
+    fun deleteEvent(articleEntity: ArticleEntity)
 
-    @Query("SELECT * FROM EventEntity")
-    fun getEvents(): List<EventEntity>
+    @Query("SELECT * FROM ArticleEntity")
+    fun getArticles(): List<ArticleEntity>
 
-    @Query("SELECT * FROM EventEntity WHERE id == :eventId")
-    fun getEventById(eventId: Int): List<EventEntity>*/
+    @Query("SELECT * FROM ArticleEntity WHERE id == :articleId")
+    fun getArticleById(articleId: Int): List<ArticleEntity>
 }
