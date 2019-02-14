@@ -68,6 +68,7 @@ class ArticlesFragment : BaseFragment() {
     private fun handleFailure(failure: Failure?) {
         when(failure) {
             is Failure.CustomError -> renderFailure(failure.errorCode, failure.errorMessage)
+            else -> renderFailure(0, "")
         }
     }
 

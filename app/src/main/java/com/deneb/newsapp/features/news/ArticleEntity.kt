@@ -12,35 +12,36 @@ data class ArticleEntity(
 
     @SerializedName("author")
     @ColumnInfo(name = "author")
-    val author: String,
+    val author: String?,
 
     @SerializedName("content")
     @ColumnInfo(name = "content")
-    val content: String,
+    val content: String?,
 
     @SerializedName("description")
     @ColumnInfo(name = "description")
-    val description: String,
+    val description: String?,
 
     @SerializedName("publishedAt")
     @ColumnInfo(name = "publishedAt")
-    val publishedAt: String,
+    val publishedAt: String?,
 
     @SerializedName("title")
     @ColumnInfo(name = "title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("url")
     @ColumnInfo(name = "url")
-    val url: String,
+    val url: String?,
 
     @SerializedName("urlToImage")
     @ColumnInfo(name = "urlToImage")
-    val urlToImage: String
+    val urlToImage: String?
 ) {
     companion object {
         fun empty() = ArticleEntity(0,
             "",
+            /*SourceEntity("",""),*/
             "",
             "",
             "",
@@ -52,12 +53,12 @@ data class ArticleEntity(
     fun toArticle(): Article {
         return Article(
             id,
-            author,
-            content,
-            description,
-            publishedAt,
-            title,
-            url,
-            urlToImage)
+            author?:"",
+            content?:"",
+            description?:"",
+            publishedAt?:"",
+            title?:"",
+            url?:"",
+            urlToImage?:"")
     }
 }

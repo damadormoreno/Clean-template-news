@@ -18,14 +18,15 @@ interface ArticlesRepository {
                 true -> request(service.getArticles(),
                     {
                         val articlesList: List<ArticleEntity> = it.articleEntities
-                        articlesList.map {
-                            it.toArticle()
+                        articlesList.map {articleEntity ->
+                            articleEntity.toArticle()
                         }
                     },
                     NewsEntity(emptyList(), "", 0) )
                 false, null -> Either.Left(Failure.NetworkConnection())
             }
         }
+
         private fun <T, R> request(call: Call<T>, transform: (T) -> R, default: T): Either<Failure, R> {
             return try {
                 val response = call.execute()
