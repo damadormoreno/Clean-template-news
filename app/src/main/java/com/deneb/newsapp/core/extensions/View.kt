@@ -36,7 +36,7 @@ fun ImageView.loadFromUrl(url: String) =
     Glide.with(this.context.applicationContext)
         .load(url)
         .transition(DrawableTransitionOptions.withCrossFade())
-        .into(this)!!
+        .into(this)
 
 internal infix fun View.onClick(function: () -> Unit) {
     setOnClickListener { function() }

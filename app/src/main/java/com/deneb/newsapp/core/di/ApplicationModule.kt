@@ -3,6 +3,7 @@ package com.deneb.newsapp.core.di
 import android.content.Context
 import com.deneb.newsapp.AndroidApplication
 import com.deneb.newsapp.BuildConfig
+import com.deneb.newsapp.features.news.ArticlesRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -38,5 +39,9 @@ class ApplicationModule(private val application: AndroidApplication) {
     }
 
     //TODO: provide repositories
+
+    @Provides
+    @Singleton
+    fun provideArticlesRepository(dataSource: ArticlesRepository.Network): ArticlesRepository = dataSource
 
 }
