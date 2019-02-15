@@ -3,13 +3,12 @@ package com.deneb.newsapp.features.news
 
 import android.os.Bundle
 import android.view.View
-
-import com.deneb.newsapp.R
 import com.deneb.newsapp.core.extensions.loadFromUrl
-import com.deneb.newsapp.core.navigation.Navigator
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_article_detail.*
-import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+import com.deneb.newsapp.R
 
 
 class ArticleDetailFragment : BaseFragment() {
@@ -26,9 +25,6 @@ class ArticleDetailFragment : BaseFragment() {
         }
     }
 
-    @Inject
-    lateinit var navigator: Navigator
-
     override fun layoutId(): Int = R.layout.fragment_article_detail
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +38,7 @@ class ArticleDetailFragment : BaseFragment() {
         if (arguments != null) {
             article = arguments.getSerializable("article") as ArticleView
             initLayout()
+            initListener()
         }
     }
 
@@ -50,6 +47,13 @@ class ArticleDetailFragment : BaseFragment() {
         titleDetail.text = article?.title
         authorDetail.text = article?.author
         contentDetail.text = article?.content
+    }
+
+    private fun initListener() {
+        tvOpenInChrome.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(article?.url))
+            startActivity(browserIntent)
+        }
     }
 
 }

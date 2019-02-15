@@ -1,16 +1,10 @@
 package com.deneb.newsapp.features.news
 
 import com.deneb.newsapp.core.exception.Failure
-import com.deneb.newsapp.core.extensions.SharedPrefences
 import com.deneb.newsapp.core.functional.Either
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs
-import khronos.Dates
-import org.threeten.bp.DateTimeUtils
-import org.threeten.bp.Instant
-import org.threeten.bp.ZonedDateTime
 import retrofit2.Call
-import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 

@@ -56,6 +56,17 @@
                 android:layout_marginTop="8dp"
                 android:textColor="@android:color/black"
                 tools:text="Contenido"/>
+        <Button
+                android:id="@+id/tvOpenInChrome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contentDetail"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/ver_m_s"/>
 
 
     </android.support.constraint.ConstraintLayout>
