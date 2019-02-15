@@ -9,7 +9,7 @@ import com.deneb.newsapp.core.dao.FetchDateDAO
 import com.deneb.newsapp.features.news.ArticleEntity
 import com.deneb.newsapp.features.news.FetchEntity
 
-@Database(entities = [ArticleEntity::class, FetchEntity::class], version = 1)
+@Database(entities = [ArticleEntity::class, FetchEntity::class], version = 2)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun articleEntityDao(): ArticleDAO

@@ -8,6 +8,7 @@ class GetArticlesViewModel
 @Inject constructor(private val getArticles: GetArticles): BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
+    var articlesViews: List<ArticleView> = listOf()
 
     fun getArticles() = getArticles.invoke(
         GetArticles.Params()) {
@@ -15,9 +16,20 @@ class GetArticlesViewModel
         }
 
     private fun handleArticlesList(articles: List<Article>) {
-        this.articles.value = articles.map {
+        articlesViews = articles.map {
             it.toArticleView()
         }
+        this.articles.value = articlesViews
+    }
+
+    fun filter(string: String) {
+        val articlesTempList : MutableList<ArticleView> = mutableListOf()
+        for (article in articlesViews) {
+            if (article.title.toLowerCase().contains(string.toLowerCase())) {
+                articlesTempList.add(article)
+            }
+        }
+        this.articles.value = articlesTempList
     }
 
 }

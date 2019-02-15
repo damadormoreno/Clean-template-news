@@ -3,7 +3,9 @@ package com.deneb.newsapp.features.news
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
 import android.view.View
+import android.widget.EditText
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.exception.Failure
 import com.deneb.newsapp.core.extensions.failure
@@ -47,12 +49,29 @@ class ArticlesFragment : BaseFragment() {
     private fun initializeView() {
         articleList.layoutManager = LinearLayoutManager(activity)
         articleList.adapter = articleAdapter
+
+        searchBarProfiles.onActionViewExpanded()
+        searchBarProfiles.isFocusable = false
+        searchBarProfiles.clearFocus()
+        searchBarProfiles.queryHint = "Buscar"
+
     }
 
     private fun initListeners() {
         articleAdapter.clickListener = { articleView ->
             navigator.showArticleDetailFragment(activity!!, articleView)
         }
+
+        searchBarProfiles.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                getArticlesViewModel.filter(s)
+                return false
+            }
+        })
     }
 
     private fun loadArticles() {
