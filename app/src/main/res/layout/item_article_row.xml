@@ -33,7 +33,7 @@
             android:layout_marginLeft="8dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:maxLines="1"
+            android:maxLines="2"
             android:ellipsize="end"
             app:layout_constraintTop_toTopOf="@+id/imgArticle"/>
 
@@ -48,7 +48,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:textSize="16sp"
-            android:maxLines="1"
+            android:maxLines="2"
             android:ellipsize="end"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/imgArticle"/>

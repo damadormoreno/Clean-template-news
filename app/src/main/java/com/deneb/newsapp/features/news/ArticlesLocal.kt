@@ -16,8 +16,4 @@ class ArticlesLocal
     override fun getArticles(): List<ArticleEntity> = articlesApi.getArticles()
     override fun addArticle(articleEntity: ArticleEntity) = articlesApi.insertArticle(articleEntity)
 
-
-
-
-
 }

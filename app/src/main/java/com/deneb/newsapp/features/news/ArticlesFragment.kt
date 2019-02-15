@@ -51,7 +51,7 @@ class ArticlesFragment : BaseFragment() {
 
     private fun initListeners() {
         articleAdapter.clickListener = { articleView ->
-            //TODO: llamar al navigator para acceder al detalle
+            navigator.showArticleDetailFragment(activity!!, articleView)
         }
     }
 

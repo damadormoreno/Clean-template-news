@@ -5,4 +5,7 @@
     <string name="Cancel">Cancelar</string>
     <string name="generic_error_title">Upsss!</string>
     <string name="generic_error_body">Parece que tenemos problemas, estamos trabajando para solucionarlo. Por favor, vuelve a intentarlo más tarde.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

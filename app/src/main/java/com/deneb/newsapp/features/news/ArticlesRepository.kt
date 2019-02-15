@@ -5,9 +5,13 @@ import com.deneb.newsapp.core.extensions.SharedPrefences
 import com.deneb.newsapp.core.functional.Either
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs
+import khronos.Dates
+import org.threeten.bp.DateTimeUtils
+import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
 import retrofit2.Call
 import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
 
 interface ArticlesRepository {
@@ -19,7 +23,8 @@ interface ArticlesRepository {
     class Network
     @Inject constructor(private val networkHandler: NetworkHandler,
                         private val service: ArticlesService,
-                        private val local: ArticlesLocal): ArticlesRepository {
+                        private val local: ArticlesLocal,
+                        private val fetch: FetchLocal): ArticlesRepository {
         
         override fun getRemoteArticles(): Either<Failure, List<Article>> {
             return when(networkHandler.isConnected) {
@@ -27,8 +32,8 @@ interface ArticlesRepository {
                         service.getArticles(),
                         {
                             val articlesList: List<ArticleEntity> = it.articleEntities
+                            fetch.addFetchDate(FetchEntity(0, Date().time))
                             addAllArticles(articlesList)
-                            SharedPrefences.defaultPrefs()
                             articlesList.map { articleEntity ->
                                 articleEntity.toArticle()
                             }
@@ -43,7 +48,8 @@ interface ArticlesRepository {
         override fun getArticles(): Either<Failure, List<Article>> {
             return try {
                 val articles = local.getArticles()
-                if (articles.isNullOrEmpty() or isFetchCurrentNeeded()){
+                val fetchDate: FetchEntity? = fetch.getFetchDate(0)
+                if (articles.isNullOrEmpty() || fetchDate == null || isFetchCurrentNeeded(fetchDate.fetchData)){
                     getRemoteArticles()
                 }else {
                     Either.Right(local.getArticles().map {
@@ -81,11 +87,10 @@ interface ArticlesRepository {
             }
         }
 
-        private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean {
-            val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
-            return lastFetchTime.isBefore(thirtyMinutesAgo)
+        private fun isFetchCurrentNeeded(lastFetchTime: Long): Boolean {
+            val oneMinuteInMillis = 60000
+            val thirtyMinutesAgo = Date(lastFetchTime - (30 * oneMinuteInMillis)).time
+            return Date(lastFetchTime).before(Date(thirtyMinutesAgo))
         }
     }
-
-
 }

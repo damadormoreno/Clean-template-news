@@ -46,7 +46,6 @@ class MainActivity : BaseActivity(), PopUpDelegator {
             ((container) as BaseFragment).onBackPressed()
             super.onBackPressed()
         }
-        super.onBackPressed()
     }
 
     // Propaga el onActivityResult al fragment inflado
