@@ -5,9 +5,9 @@ import com.deneb.newsapp.core.platform.ContextHandler
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
+
 class FetchLocal
-@Inject constructor(contextHandler: ContextHandler): FetchDbLocal {
+(contextHandler: ContextHandler): FetchDbLocal {
 
     private val fetchDb by lazy {
         AppDatabase.getAppDataBase(contextHandler.appContext)?.fetchEntityDao()!!

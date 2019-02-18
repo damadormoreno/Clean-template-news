@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticlesService
-@Inject constructor(retrofit: Retrofit) : ArticlesApi {
+(retrofit: Retrofit) : ArticlesApi {
     private val articlesApi by lazy { retrofit.create(ArticlesApi::class.java) }
 
     override fun getArticles(): Call<NewsEntity> {

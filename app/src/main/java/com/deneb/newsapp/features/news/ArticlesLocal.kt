@@ -5,9 +5,8 @@ import com.deneb.newsapp.core.platform.ContextHandler
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class ArticlesLocal
-@Inject constructor(contextHandler: ContextHandler): ArticlesDBLocal{
+(contextHandler: ContextHandler): ArticlesDBLocal{
 
     private val articlesApi by lazy {
         AppDatabase.getAppDataBase(contextHandler.appContext)?.articleEntityDao()!!

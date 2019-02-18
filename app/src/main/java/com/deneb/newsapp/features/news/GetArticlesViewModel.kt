@@ -5,7 +5,7 @@ import com.deneb.newsapp.core.platform.BaseViewModel
 import javax.inject.Inject
 
 class GetArticlesViewModel
-@Inject constructor(private val getArticles: GetArticles): BaseViewModel() {
+(private val getArticles: GetArticles): BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
     var articlesViews: List<ArticleView> = listOf()

@@ -4,7 +4,7 @@ import com.deneb.newsapp.core.interactor.UseCase
 import javax.inject.Inject
 
 class GetArticles
-@Inject constructor(private val articlesRepository: ArticlesRepository): UseCase<List<Article>, GetArticles.Params>() {
+(private val articlesRepository: ArticlesRepository): UseCase<List<Article>, GetArticles.Params>() {
     override suspend fun run(params: Params) = articlesRepository.getArticles()
     class Params
 
