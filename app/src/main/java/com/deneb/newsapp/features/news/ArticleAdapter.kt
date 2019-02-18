@@ -11,7 +11,7 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ArticleAdapter
-@Inject constructor(): RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
+: RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
     internal var collection: List<ArticleView> by Delegates.observable(emptyList()) {
             _, _, _ -> notifyDataSetChanged()
     }

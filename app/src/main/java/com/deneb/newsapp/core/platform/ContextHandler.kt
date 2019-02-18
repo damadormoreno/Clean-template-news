@@ -7,8 +7,8 @@ import javax.inject.Singleton
 /**
  * Injectable class which handles context for access room database.
  */
-@Singleton
+
 class ContextHandler
-@Inject constructor(private val context: Context) {
+(private val context: Context) {
     val appContext: Context get() = context.applicationContext
 }

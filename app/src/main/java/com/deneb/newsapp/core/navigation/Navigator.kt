@@ -7,9 +7,9 @@ import com.deneb.newsapp.features.news.ArticleView
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
+
 class Navigator
-@Inject constructor(){
+{
 
     // Activities ==================================================================================
     private fun showMainActivity(context: Context) = context.startActivity(MainActivity.callingIntent(context))

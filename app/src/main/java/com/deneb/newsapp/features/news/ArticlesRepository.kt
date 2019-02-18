@@ -15,7 +15,7 @@ interface ArticlesRepository {
     fun add(article: ArticleEntity): Either<Failure, Any>
 
     class Network
-    @Inject constructor(private val networkHandler: NetworkHandler,
+    (private val networkHandler: NetworkHandler,
                         private val service: ArticlesService,
                         private val local: ArticlesLocal,
                         private val fetch: FetchLocal): ArticlesRepository {

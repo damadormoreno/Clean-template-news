@@ -15,25 +15,20 @@ import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.navigation.Navigator
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
+import org.koin.android.ext.android.inject
 import javax.inject.Inject
 
 class ArticlesFragment : BaseFragment() {
 
     override fun layoutId() = R.layout.fragment_articles
 
-    @Inject
-    lateinit var navigator: Navigator
-
-    @Inject
-    lateinit var articleAdapter: ArticleAdapter
-
-    private lateinit var getArticlesViewModel: GetArticlesViewModel
+    private val navigator: Navigator by inject()
+    private val articleAdapter: ArticleAdapter by inject()
+    private val getArticlesViewModel: GetArticlesViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
-
-        getArticlesViewModel = viewModel(viewModelFactory) {
+        with(getArticlesViewModel) {
             observe(articles, ::renderArticlesList)
             failure(failure, ::handleFailure)
         }

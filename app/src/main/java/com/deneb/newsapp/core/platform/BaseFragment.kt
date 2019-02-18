@@ -8,13 +8,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.deneb.newsapp.AndroidApplication
 import com.deneb.newsapp.R
-import com.deneb.newsapp.core.di.ApplicationComponent
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.navigation.PopUpDelegator
 import kotlinx.android.synthetic.main.activity_layout.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 abstract class BaseFragment: Fragment() {
 
@@ -22,13 +20,7 @@ abstract class BaseFragment: Fragment() {
 
     abstract fun layoutId(): Int
 
-
-    val appComponent: ApplicationComponent by lazy(LazyThreadSafetyMode.NONE) {
-        (activity?.application as AndroidApplication).appComponent
-    }
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModelFactory: ViewModelProvider.Factory by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(layoutId(), container, false)
