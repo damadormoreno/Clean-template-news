@@ -21,6 +21,11 @@ val applicationModule = module(override = true) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+    single {
+        Retrofit.Builder()
+            .client(createClient())
+            .addConverterFactory(GsonConverterFactory.create())
+    }
     single { Navigator() }
     factory { ArticleAdapter() }
     factory { ContextHandler(get()) }

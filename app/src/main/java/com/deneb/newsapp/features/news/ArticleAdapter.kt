@@ -1,6 +1,6 @@
 package com.deneb.newsapp.features.news
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.deneb.newsapp.R
@@ -11,7 +11,7 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ArticleAdapter
-: RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
+: androidx.recyclerview.widget.RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
     internal var collection: List<ArticleView> by Delegates.observable(emptyList()) {
             _, _, _ -> notifyDataSetChanged()
     }
@@ -27,7 +27,7 @@ class ArticleAdapter
 
     override fun getItemCount() = collection.size
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         fun bind(articleView: ArticleView, clickListener: (ArticleView) -> Unit) {
             itemView.tvTitleArticle.text = articleView.title
             itemView.tvDescriptionArticle.text = articleView.description

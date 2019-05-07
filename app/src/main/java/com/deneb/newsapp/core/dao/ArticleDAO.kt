@@ -1,6 +1,6 @@
 package com.deneb.newsapp.core.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.deneb.newsapp.features.news.ArticleEntity
 
 @Dao

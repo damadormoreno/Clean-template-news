@@ -2,8 +2,8 @@ package com.deneb.newsapp.features.news
 
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.SearchView
 import android.view.View
 import android.widget.EditText
 import com.deneb.newsapp.R
@@ -42,7 +42,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun initializeView() {
-        articleList.layoutManager = LinearLayoutManager(activity)
+        articleList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         articleList.adapter = articleAdapter
 
         searchBarProfiles.onActionViewExpanded()

@@ -1,7 +1,7 @@
 package com.deneb.newsapp.core.navigation
 
 import android.content.Context
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.deneb.newsapp.features.news.ArticleDetailFragment
 import com.deneb.newsapp.features.news.ArticleView
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class Navigator
     private fun showMainActivity(context: Context) = context.startActivity(MainActivity.callingIntent(context))
 
     // Fragments ===================================================================================
-    fun showArticleDetailFragment(activity: FragmentActivity, article: ArticleView) {
+    fun showArticleDetailFragment(activity: androidx.fragment.app.FragmentActivity, article: ArticleView) {
         (activity as MainActivity).replaceFragment(ArticleDetailFragment.newInstance(article), "ArticleDetailsFragment")
     }
 }

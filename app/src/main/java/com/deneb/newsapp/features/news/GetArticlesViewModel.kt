@@ -1,6 +1,6 @@
 package com.deneb.newsapp.features.news
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.deneb.newsapp.core.platform.BaseViewModel
 import javax.inject.Inject
 

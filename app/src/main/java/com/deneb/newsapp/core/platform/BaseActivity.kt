@@ -1,7 +1,7 @@
 package com.deneb.newsapp.core.platform
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.extensions.inTransaction
 
