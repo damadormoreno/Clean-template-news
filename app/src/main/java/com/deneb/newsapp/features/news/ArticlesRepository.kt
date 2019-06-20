@@ -6,7 +6,6 @@ import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs
 import retrofit2.Call
 import java.util.*
-import javax.inject.Inject
 
 interface ArticlesRepository {
 

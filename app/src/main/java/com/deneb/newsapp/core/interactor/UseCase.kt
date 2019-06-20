@@ -2,10 +2,7 @@ package com.deneb.newsapp.core.interactor
 
 import com.deneb.newsapp.core.exception.Failure
 import com.deneb.newsapp.core.functional.Either
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 abstract class UseCase<out Type, in Params> where Type : Any {
 
