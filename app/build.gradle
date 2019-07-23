@@ -43,6 +43,7 @@ dependencies {
     // KOIN
     implementation 'org.koin:koin-android:1.0.2'
     implementation 'org.koin:koin-android-viewmodel:1.0.2'
+    implementation 'org.koin:koin-android-scope:1.0.2'
 
 
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'

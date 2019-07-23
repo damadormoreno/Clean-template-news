@@ -42,7 +42,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun initializeView() {
-        articleList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        articleList.layoutManager = LinearLayoutManager(activity)
         articleList.adapter = articleAdapter
 
         searchBarProfiles.onActionViewExpanded()

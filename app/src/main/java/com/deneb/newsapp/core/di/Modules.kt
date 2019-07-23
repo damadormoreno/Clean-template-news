@@ -12,8 +12,10 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-val applicationModule = module(override = true) {
+//TODO: Mirar scopes para no inyectar en toda la aplicación
+val networkModule = module {
+    factory { ContextHandler(get()) }
+    factory { NetworkHandler(get()) }
     single {
         Retrofit.Builder()
             .baseUrl("https://newsapi.org/v2/")
@@ -26,19 +28,30 @@ val applicationModule = module(override = true) {
             .client(createClient())
             .addConverterFactory(GsonConverterFactory.create())
     }
+}
+val applicationModule = module(override = true) {
     single { Navigator() }
     factory { ArticleAdapter() }
-    factory { ContextHandler(get()) }
+}
+
+val databaseModule = module {
     factory { FetchLocal(get()) }
     factory { ArticlesLocal(get()) }
-    factory { ArticlesService(get()) }
-    factory { NetworkHandler(get()) }
-    factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get()) }
-    factory { GetArticles(get()) }
-    viewModel {
-        GetArticlesViewModel(get())
-    }
+}
 
+val datasourceModule = module {
+    factory { ArticlesService(get()) }
+}
+
+val repositoryModule = module {
+    factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get()) }
+}
+val useCaseModule = module {
+    factory { GetArticles(get()) }
+}
+
+val viewModelModule = module {
+    viewModel { GetArticlesViewModel(get()) }
 }
 
 private fun createClient(): OkHttpClient {

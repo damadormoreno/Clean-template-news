@@ -52,16 +52,27 @@ fun ImageView.loadFromDrawable(drawable: Int) {
         //.apply(options)
         .transition(DrawableTransitionOptions.withCrossFade())
         .listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
                 return false
             }
 
-            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
 
                 return false
             }
         })
-        .into(this)!!
+        .into(this)
 }
 
 fun ImageView.loadFromDrawable(drawable: Int, requestListener: RequestListener<Drawable>) {
@@ -74,7 +85,7 @@ fun ImageView.loadFromDrawable(drawable: Int, requestListener: RequestListener<D
         //.apply(options)
         .transition(DrawableTransitionOptions.withCrossFade())
         .listener(requestListener)
-        .into(this)!!
+        .into(this)
 }
 
 fun ImageView.loadFromBitmap(bitmap: Bitmap) {
@@ -86,7 +97,7 @@ fun ImageView.loadFromBitmap(bitmap: Bitmap) {
         .load(bitmap)
         //.apply(options)
         .transition(DrawableTransitionOptions.withCrossFade())
-        .into(this)!!
+        .into(this)
 }
 
 fun ImageView.loadUrlAndPostponeEnterTransition(url: String, activity: FragmentActivity) {

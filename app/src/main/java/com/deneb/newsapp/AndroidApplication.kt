@@ -8,7 +8,15 @@ class AndroidApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startKoin(this, listOf(applicationModule))
+        startKoin(this, listOf(
+            networkModule,
+            applicationModule,
+            databaseModule,
+            datasourceModule,
+            repositoryModule,
+            useCaseModule,
+            viewModelModule
+            ))
 
     }
 }
