@@ -42,6 +42,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun initializeView() {
+
         articleList.layoutManager = LinearLayoutManager(activity)
         articleList.adapter = articleAdapter
 
@@ -100,3 +101,6 @@ class ArticlesFragment : BaseFragment() {
     }
 
 }
+//https://www.artistapirata.com/?s=photoshop
+//https://www.youtube.com/watch?v=P35hQOsW0xU
+//
