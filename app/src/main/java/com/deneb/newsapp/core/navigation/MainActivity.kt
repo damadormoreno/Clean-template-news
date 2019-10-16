@@ -1,31 +1,43 @@
 package com.deneb.newsapp.core.navigation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.functional.DialogCallback
-import com.deneb.newsapp.core.platform.BaseActivity
-import com.deneb.newsapp.core.platform.BaseFragment
-import com.deneb.newsapp.features.news.ArticlesFragment
+import kotlinx.android.synthetic.main.navigation_activity.*
 
-class MainActivity : BaseActivity(), PopUpDelegator {
-
-    override fun fragment() = ArticlesFragment()
-
-    companion object {
-        fun callingIntent(context: Context): Intent {
-            val intentToLaunch = Intent(context, MainActivity::class.java)
-            intentToLaunch.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            return intentToLaunch
-        }
-    }
+class MainActivity : AppCompatActivity(), PopUpDelegator {
+    private lateinit var appBarConfiguration : AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_layout)
-        addFragment(savedInstanceState, "ArticlesFragment")
+        setContentView(R.layout.navigation_activity)
+
+        setSupportActionBar(toolbar)
+        val navController = findNavController(R.id.fragment)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            toolbar.title = when (destination.id) {
+                R.id.articlesFragment -> "News"
+                R.id.articleDetailFragment -> "Details"
+                else -> "News"
+            }
+            //Controlamos que al cambiar de fragment no siga nuestro progress activo
+            if (progress.visibility == View.VISIBLE) progress.visibility = View.GONE
+
+        }
     }
+
     override fun showErrorWithRetry(
         title: String,
         message: String,
@@ -37,22 +49,4 @@ class MainActivity : BaseActivity(), PopUpDelegator {
         // del boton pulsado llamar a callback.onAccept() o callback.onDecline() que lo que hace es
         // delegar al fragment
     }
-
-    override fun onBackPressed() {
-        val container = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-        if (container?.tag.equals("ArticlesFragment")){
-            moveTaskToBack(true)
-        }else {
-            ((container) as BaseFragment).onBackPressed()
-            super.onBackPressed()
-        }
-    }
-
-    // Propaga el onActivityResult al fragment inflado
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val container = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-        ((container) as BaseFragment).onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
 }

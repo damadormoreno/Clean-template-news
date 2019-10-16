@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.navigation.PopUpDelegator
-import kotlinx.android.synthetic.main.activity_layout.*
+import kotlinx.android.synthetic.main.navigation_activity.*
 import org.koin.android.ext.android.inject
 
 abstract class BaseFragment: androidx.fragment.app.Fragment() {

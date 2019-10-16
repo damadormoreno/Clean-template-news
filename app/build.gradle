@@ -30,6 +30,14 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -52,6 +60,10 @@ dependencies {
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
     implementation 'org.koin:koin-android-scope:2.0.1'
+
+    //Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
 
 
     kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0'
@@ -80,5 +92,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'org.mockito:mockito-inline:3.0.0'
+
 
 }

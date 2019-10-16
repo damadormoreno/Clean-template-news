@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_navigation"
+        app:startDestination="@id/articlesFragment">
+
+    <fragment
+            android:id="@+id/articlesFragment"
+            android:name="com.deneb.newsapp.features.news.ArticlesFragment"
+            android:label="fragment_articles"
+            tools:layout="@layout/fragment_articles" >
+        <action
+                android:id="@+id/action_articlesFragment_to_articleDetailFragment"
+                app:destination="@id/articleDetailFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/articleDetailFragment"
+            android:name="com.deneb.newsapp.features.news.ArticleDetailFragment"
+            android:label="ArticleDetailFragment" />
+</navigation>

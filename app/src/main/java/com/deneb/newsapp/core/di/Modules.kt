@@ -1,7 +1,6 @@
 package com.deneb.newsapp.core.di
 
 import com.deneb.newsapp.BuildConfig
-import com.deneb.newsapp.core.navigation.Navigator
 import com.deneb.newsapp.core.platform.ContextHandler
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.features.news.*
@@ -31,7 +30,6 @@ val networkModule = module {
     }
 }
 val applicationModule = module(override = true) {
-    single { Navigator() }
     factory { ArticleAdapter() }
 }
 
