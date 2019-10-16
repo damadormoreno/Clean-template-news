@@ -17,12 +17,11 @@ class AndroidApplication: Application() {
                 networkModule,
                 applicationModule,
                 databaseModule,
-                datasourceModule,
+                dataSourceModule,
                 repositoryModule,
                 useCaseModule,
                 viewModelModule
             ))
         }
-
     }
 }

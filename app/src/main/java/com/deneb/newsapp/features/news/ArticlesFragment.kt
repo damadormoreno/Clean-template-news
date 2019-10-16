@@ -55,6 +55,7 @@ class ArticlesFragment : BaseFragment() {
 
     private fun initListeners() {
         articleAdapter.clickListener = { articleView ->
+            //Todo: En el fragment meter el botón de atrás o lanzar activity.
             navigator.showArticleDetailFragment(activity!!, articleView)
         }
 

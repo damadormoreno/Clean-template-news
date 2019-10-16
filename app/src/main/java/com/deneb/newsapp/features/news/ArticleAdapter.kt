@@ -7,11 +7,10 @@ import com.deneb.newsapp.R
 import com.deneb.newsapp.core.extensions.inflate
 import com.deneb.newsapp.core.extensions.loadFromUrl
 import kotlinx.android.synthetic.main.item_article_row.view.*
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ArticleAdapter
-: androidx.recyclerview.widget.RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
+: RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
     internal var collection: List<ArticleView> by Delegates.observable(emptyList()) {
             _, _, _ -> notifyDataSetChanged()
     }
@@ -27,7 +26,7 @@ class ArticleAdapter
 
     override fun getItemCount() = collection.size
 
-    class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(articleView: ArticleView, clickListener: (ArticleView) -> Unit) {
             itemView.tvTitleArticle.text = articleView.title
             itemView.tvDescriptionArticle.text = articleView.description

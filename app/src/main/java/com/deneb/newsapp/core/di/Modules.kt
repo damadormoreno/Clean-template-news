@@ -23,6 +23,7 @@ val networkModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+    //Si necesitamos el builder para proporcionarle otra urlbase
     single {
         Retrofit.Builder()
             .client(createClient())
@@ -34,30 +35,34 @@ val applicationModule = module(override = true) {
     factory { ArticleAdapter() }
 }
 
-val databaseModule = module {
-    factory { FetchLocal(get()) }
-    factory { ArticlesLocal(get()) }
-}
-
-val datasourceModule = module {
-    factory { ArticlesService(get()) }
+val useCaseModule = module {
+    factory { GetArticles(get()) }
 }
 
 val repositoryModule = module {
     factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get()) }
 }
-val useCaseModule = module {
-    factory { GetArticles(get()) }
+
+val dataSourceModule = module {
+    factory { ArticlesService(get()) }
+}
+
+val databaseModule = module {
+    factory { FetchLocal(get()) }
+    factory { ArticlesLocal(get()) }
 }
 
 val viewModelModule = module {
-    viewModel { GetArticlesViewModel(get()) }
+    viewModel {
+        GetArticlesViewModel(get())
+    }
 }
 
 private fun createClient(): OkHttpClient {
     val okHttpClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
     if (BuildConfig.DEBUG) {
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         okHttpClientBuilder.addInterceptor(loggingInterceptor)
     }
     return okHttpClientBuilder.build()
