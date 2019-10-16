@@ -13,20 +13,9 @@ import com.deneb.newsapp.R
 
 class ArticleDetailFragment : BaseFragment() {
 
-    private var article: ArticleView? = null
-
-    companion object {
-        fun newInstance(article: ArticleView): ArticleDetailFragment {
-            val fragment = ArticleDetailFragment()
-            val args = Bundle()
-            args.putSerializable("article", article)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun layoutId(): Int = R.layout.fragment_article_detail
 
+    private var article: ArticleView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
