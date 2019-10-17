@@ -7,6 +7,7 @@ import com.deneb.newsapp.features.news.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,7 +31,9 @@ val networkModule = module {
     }
 }
 val applicationModule = module(override = true) {
-    factory { ArticleAdapter() }
+    scope(named<ArticlesFragment>()){
+        factory { ArticleAdapter() }
+    }
 }
 
 val useCaseModule = module {
@@ -51,8 +54,10 @@ val databaseModule = module {
 }
 
 val viewModelModule = module {
-    viewModel {
-        GetArticlesViewModel(get())
+    scope(named<ArticlesFragment>()){
+        viewModel {
+            GetArticlesViewModel(get())
+        }
     }
 }
 

@@ -14,13 +14,14 @@ import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.currentScope
 
 class ArticlesFragment : BaseFragment() {
 
     override fun layoutId() = R.layout.fragment_articles
 
-    private val articleAdapter: ArticleAdapter by inject()
-    private val getArticlesViewModel: GetArticlesViewModel by inject()
+    private val articleAdapter: ArticleAdapter by currentScope.inject()
+    private val getArticlesViewModel: GetArticlesViewModel by currentScope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
