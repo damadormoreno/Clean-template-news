@@ -1,18 +1,21 @@
 package com.deneb.newsapp.core.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.deneb.newsapp.BuildConfig
+import com.deneb.newsapp.core.extensions.SharedPrefences
 import com.deneb.newsapp.core.platform.ContextHandler
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.features.news.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-//TODO: Mirar scopes para no inyectar en toda la aplicación
 val networkModule = module {
     factory { ContextHandler(get()) }
     factory { NetworkHandler(get()) }
@@ -34,6 +37,7 @@ val applicationModule = module(override = true) {
     scope(named<ArticlesFragment>()){
         factory { ArticleAdapter() }
     }
+    single<SharedPreferences> { androidContext().getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE) }
 }
 
 val useCaseModule = module {
@@ -41,7 +45,7 @@ val useCaseModule = module {
 }
 
 val repositoryModule = module {
-    factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get()) }
+    factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get(), get()) }
 }
 
 val dataSourceModule = module {

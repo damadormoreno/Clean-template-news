@@ -3,7 +3,7 @@ package com.deneb.newsapp.core.extensions
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 object SharedPrefences {
 

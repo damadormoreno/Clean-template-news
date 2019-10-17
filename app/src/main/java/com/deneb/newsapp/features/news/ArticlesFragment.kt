@@ -13,7 +13,6 @@ import com.deneb.newsapp.core.extensions.observe
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
-import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 
 class ArticlesFragment : BaseFragment() {
