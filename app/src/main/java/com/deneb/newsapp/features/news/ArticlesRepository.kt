@@ -1,12 +1,13 @@
 package com.deneb.newsapp.features.news
 
+import android.content.SharedPreferences
 import com.deneb.newsapp.core.exception.Failure
+import com.deneb.newsapp.core.extensions.SharedPrefences
 import com.deneb.newsapp.core.functional.Either
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs
 import retrofit2.Call
 import java.util.*
-import javax.inject.Inject
 
 interface ArticlesRepository {
 
@@ -18,15 +19,22 @@ interface ArticlesRepository {
     (private val networkHandler: NetworkHandler,
                         private val service: ArticlesService,
                         private val local: ArticlesLocal,
-                        private val fetch: FetchLocal): ArticlesRepository {
-        
+                        private val fetch: FetchLocal,
+                        private val shared: SharedPreferences): ArticlesRepository {
+
         override fun getRemoteArticles(): Either<Failure, List<Article>> {
             return when(networkHandler.isConnected) {
                 true -> request(
                         service.getArticles(),
                         {
                             val articlesList: List<ArticleEntity> = it.articleEntities
+
+                            //Guardamos en base de datos la fecha de la actualización
                             fetch.addFetchDate(FetchEntity(0, Date().time))
+
+                            //También se pueden utilizar las shared para guardar este dato:
+                            shared.edit().putLong("time", Date().time).apply()
+
                             addAllArticles(articlesList)
                             articlesList.map { articleEntity ->
                                 articleEntity.toArticle()
@@ -41,6 +49,7 @@ interface ArticlesRepository {
 
         override fun getArticles(): Either<Failure, List<Article>> {
             return try {
+                val time = shared.getLong("time", 0L)
                 val articles = local.getArticles()
                 val fetchDate: FetchEntity? = fetch.getFetchDate(0)
                 if (articles.isNullOrEmpty() || fetchDate == null || isFetchCurrentNeeded(fetchDate.fetchData)){

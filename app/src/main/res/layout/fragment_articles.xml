@@ -6,18 +6,18 @@
         android:layout_height="match_parent"
         tools:context=".features.news.ArticlesFragment"
         android:orientation="vertical">
-    <android.support.v7.widget.SearchView
+    <androidx.appcompat.widget.SearchView
             android:id="@+id/searchBarProfiles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
-    </android.support.v7.widget.SearchView>
+    </androidx.appcompat.widget.SearchView>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/articleList"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

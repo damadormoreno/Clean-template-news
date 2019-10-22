@@ -2,29 +2,25 @@ package com.deneb.newsapp.features.news
 
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.SearchView
 import android.view.View
-import android.widget.EditText
+import androidx.navigation.findNavController
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.exception.Failure
 import com.deneb.newsapp.core.extensions.failure
 import com.deneb.newsapp.core.extensions.observe
-import com.deneb.newsapp.core.extensions.viewModel
 import com.deneb.newsapp.core.functional.DialogCallback
-import com.deneb.newsapp.core.navigation.Navigator
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
-import org.koin.android.ext.android.inject
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
 
 class ArticlesFragment : BaseFragment() {
 
     override fun layoutId() = R.layout.fragment_articles
 
-    private val navigator: Navigator by inject()
-    private val articleAdapter: ArticleAdapter by inject()
-    private val getArticlesViewModel: GetArticlesViewModel by inject()
+    private val articleAdapter: ArticleAdapter by currentScope.inject()
+    private val getArticlesViewModel: GetArticlesViewModel by currentScope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +38,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun initializeView() {
+
         articleList.layoutManager = LinearLayoutManager(activity)
         articleList.adapter = articleAdapter
 
@@ -54,7 +51,9 @@ class ArticlesFragment : BaseFragment() {
 
     private fun initListeners() {
         articleAdapter.clickListener = { articleView ->
-            navigator.showArticleDetailFragment(activity!!, articleView)
+            val bundle = Bundle()
+            bundle.putSerializable("article", articleView)
+            view?.findNavController()?.navigate(R.id.action_articlesFragment_to_articleDetailFragment, bundle)
         }
 
         searchBarProfiles.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -100,3 +99,6 @@ class ArticlesFragment : BaseFragment() {
     }
 
 }
+//https://www.artistapirata.com/?s=photoshop
+//https://www.youtube.com/watch?v=P35hQOsW0xU
+//

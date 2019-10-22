@@ -1,13 +1,12 @@
 package com.deneb.newsapp.features.news
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.extensions.inflate
 import com.deneb.newsapp.core.extensions.loadFromUrl
 import kotlinx.android.synthetic.main.item_article_row.view.*
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ArticleAdapter

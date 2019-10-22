@@ -1,20 +1,20 @@
 package com.deneb.newsapp.core.platform
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.navigation.PopUpDelegator
-import kotlinx.android.synthetic.main.activity_layout.*
+import kotlinx.android.synthetic.main.navigation_activity.*
 import org.koin.android.ext.android.inject
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment: androidx.fragment.app.Fragment() {
 
     private var popUpDelegator: PopUpDelegator? = null
 
