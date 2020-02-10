@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), PopUpDelegator {
         setContentView(R.layout.navigation_activity)
 
         setSupportActionBar(toolbar)
-        val navController = findNavController(R.id.fragment)
+        val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 

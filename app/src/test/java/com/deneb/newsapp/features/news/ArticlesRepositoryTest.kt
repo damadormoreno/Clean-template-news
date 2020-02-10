@@ -1,5 +1,6 @@
 package com.deneb.newsapp.features.news
 
+import android.content.SharedPreferences
 import com.deneb.newsapp.UnitTest
 import com.deneb.newsapp.core.exception.Failure
 import com.deneb.newsapp.core.functional.Either
@@ -12,6 +13,7 @@ import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.Mockito
 import retrofit2.Call
 import retrofit2.Response
 
@@ -26,10 +28,11 @@ class ArticlesRepositoryTest: UnitTest() {
 
     @Mock private lateinit var fetchLocal: FetchLocal
     @Mock private lateinit var local: ArticlesLocal
+    private var sharedPreferences: SharedPreferences = Mockito.mock(SharedPreferences::class.java)
 
     @Before
     fun setUp(){
-        networkRepository = ArticlesRepository.Network(networkHandler, service, local, fetchLocal)
+        networkRepository = ArticlesRepository.Network(networkHandler, service, local, fetchLocal, sharedPreferences)
     }
 
     @Test fun `should return empty list by default`() {

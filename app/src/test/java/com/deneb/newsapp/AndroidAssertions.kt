@@ -11,5 +11,5 @@ infix fun KClass<out AppCompatActivity>.`shouldNavigateTo`(nextActivity: KClass<
     val shadowActivity = Shadows.shadowOf(originActivity)
     val nextIntent = shadowActivity.peekNextStartedActivity()
 
-    nextIntent.component.className shouldEqual nextActivity.java.canonicalName
+    nextIntent.component?.className shouldEqual nextActivity.java.canonicalName
 }

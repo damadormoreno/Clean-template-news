@@ -2,7 +2,6 @@ package com.deneb.newsapp.features.news
 
 import android.content.SharedPreferences
 import com.deneb.newsapp.core.exception.Failure
-import com.deneb.newsapp.core.extensions.SharedPrefences
 import com.deneb.newsapp.core.functional.Either
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs

@@ -2,7 +2,7 @@ package com.deneb.newsapp
 
 import android.app.Application
 import android.content.Context
-import com.deneb.newsapp.core.platform.BaseActivity
+import com.deneb.newsapp.core.navigation.MainActivity
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
@@ -24,7 +24,7 @@ abstract class AndroidTest {
 
     fun context(): Context = RuntimeEnvironment.application
 
-    fun activityContext(): Context = mock(BaseActivity::class.java)
+    fun activityContext(): Context = mock(MainActivity::class.java)
 
     internal class ApplicationStub : Application()
 }
