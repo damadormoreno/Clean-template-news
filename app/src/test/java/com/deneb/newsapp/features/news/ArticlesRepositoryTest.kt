@@ -95,7 +95,7 @@ class ArticlesRepositoryTest: UnitTest() {
 
         movies shouldBeInstanceOf Either::class.java
         movies.isLeft shouldEqual true
-        movies.either({ failure -> failure shouldBeInstanceOf Failure.NetworkConnection::class.java }, {})
+        movies.fold({ failure -> failure shouldBeInstanceOf Failure.NetworkConnection::class.java }, {})
         verifyZeroInteractions(service)
     }
 
@@ -107,7 +107,7 @@ class ArticlesRepositoryTest: UnitTest() {
 
         movies shouldBeInstanceOf Either::class.java
         movies.isLeft shouldEqual true
-        movies.either({ failure -> failure shouldBeInstanceOf Failure.NetworkConnection::class.java }, {})
+        movies.fold({ failure -> failure shouldBeInstanceOf Failure.NetworkConnection::class.java }, {})
         verifyZeroInteractions(service)
     }
 
@@ -119,6 +119,6 @@ class ArticlesRepositoryTest: UnitTest() {
 
         movies shouldBeInstanceOf Either::class.java
         movies.isLeft shouldEqual true
-        movies.either({ failure -> failure shouldBeInstanceOf Failure.ServerError::class.java }, {})
+        movies.fold({ failure -> failure shouldBeInstanceOf Failure.ServerError::class.java }, {})
     }
 }

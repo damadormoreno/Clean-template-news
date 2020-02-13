@@ -2,7 +2,6 @@ package com.deneb.newsapp.features.news
 
 import androidx.lifecycle.MutableLiveData
 import com.deneb.newsapp.core.platform.BaseViewModel
-import javax.inject.Inject
 
 class GetArticlesViewModel
 (private val getArticles: GetArticles): BaseViewModel() {
@@ -12,7 +11,7 @@ class GetArticlesViewModel
 
     fun getArticles() = getArticles.invoke(
         GetArticles.Params()) {
-            it.either(::handleFailure, ::handleArticlesList)
+            it.fold(::handleFailure, ::handleArticlesList)
         }
 
     private fun handleArticlesList(articles: List<Article>) {
