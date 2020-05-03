@@ -1,6 +1,7 @@
 package com.deneb.newsapp.features.news
 
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,5 +13,9 @@ class ArticlesService
 
     override fun getArticles(): Call<NewsEntity> {
         return articlesApi.getArticles()
+    }
+
+    override suspend fun getArticlesFlow(): Response<NewsEntity> {
+        return articlesApi.getArticlesFlow()
     }
 }

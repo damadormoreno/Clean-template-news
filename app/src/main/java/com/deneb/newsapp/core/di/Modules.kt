@@ -34,18 +34,20 @@ val networkModule = module {
     }
 }
 val applicationModule = module(override = true) {
-    scope(named<ArticlesFragment>()){
+    /*scope(named<ArticlesFragment>()){
         factory { ArticleAdapter() }
-    }
+    }*/
+    factory { ArticleAdapter() }
     single<SharedPreferences> { androidContext().getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE) }
-}
-
-val useCaseModule = module {
-    factory { GetArticles(get()) }
 }
 
 val repositoryModule = module {
     factory<ArticlesRepository> { ArticlesRepository.Network(get(), get(), get(), get(), get()) }
+}
+
+val useCaseModule = module {
+    factory { GetArticles(get()) }
+    factory { GetArticlesFlow(get()) }
 }
 
 val dataSourceModule = module {
@@ -58,11 +60,14 @@ val databaseModule = module {
 }
 
 val viewModelModule = module {
-    scope(named<ArticlesFragment>()){
+    viewModel {
+        GetArticlesViewModel(get())
+    }
+    /*scope(named<ArticlesFragment>()){
         viewModel {
             GetArticlesViewModel(get())
         }
-    }
+    }*/
 }
 
 private fun createClient(): OkHttpClient {
