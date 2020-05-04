@@ -14,8 +14,4 @@ class ArticlesService
     override fun getArticles(): Call<NewsEntity> {
         return articlesApi.getArticles()
     }
-
-    override suspend fun getArticlesFlow(): Response<NewsEntity> {
-        return articlesApi.getArticlesFlow()
-    }
 }

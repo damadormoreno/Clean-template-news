@@ -1,15 +1,11 @@
 package com.deneb.newsapp.features.news
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.deneb.newsapp.core.extensions.cancelIfActive
-import com.deneb.newsapp.core.functional.Error
-import com.deneb.newsapp.core.functional.Success
+import com.deneb.newsapp.core.exception.Failure
+import com.deneb.newsapp.core.functional.State
 import com.deneb.newsapp.core.interactor.UseCaseFlow
 import com.deneb.newsapp.core.platform.BaseViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class GetArticlesViewModel
@@ -17,36 +13,24 @@ class GetArticlesViewModel
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
     var articlesViews: List<ArticleView> = listOf()
+    var loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    var job: Job? = null
-
-    fun getArticles() {
-        job.cancelIfActive()
-        job = viewModelScope.launch {
-            getArticles(UseCaseFlow.None())
-                .onStart {
-                    // Invokes the given [action] when the this flow starts to be collected.
-                    //lanzar progressdialog xejemplo (Aunque yo prefiero dejárselo a la vista)
+    suspend fun getArticlesFlow() {
+        getArticles.invoke(UseCaseFlow.None())
+            .collect { state ->
+            when(state) {
+                is State.Loading -> loading.value = true //ShowLoading, un livedata?
+                is State.Failed -> {
+                    loading.value = false
+                    handleFailure(state.failure)
                 }
-                .onEach {
-                    //Returns a flow which performs the given [action] on each value of the original flow.
-                    //parar progressdialog
-                }
-                .catch { handleFailureFlow(it) }
-                .collect {
-                    when (it) {
-                        is Success<List<Article>> -> {
-                            handleArticlesList(it.data)
-                        }
-                        is Error -> {
-                            handleFailureFlow(Throwable())
-                        }
-                    }
-                }
+                is State.Success -> handleArticlesList(state.data)
+            }
         }
     }
 
     private fun handleArticlesList(articles: List<Article>) {
+        loading.value = false
         articlesViews = articles.map {
             it.toArticleView()
         }

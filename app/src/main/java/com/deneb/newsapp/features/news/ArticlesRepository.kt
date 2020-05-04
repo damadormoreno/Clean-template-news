@@ -2,10 +2,7 @@ package com.deneb.newsapp.features.news
 
 import android.content.SharedPreferences
 import com.deneb.newsapp.core.exception.Failure
-import com.deneb.newsapp.core.functional.Either
-import com.deneb.newsapp.core.functional.Error
-import com.deneb.newsapp.core.functional.Result
-import com.deneb.newsapp.core.functional.Success
+import com.deneb.newsapp.core.functional.*
 import com.deneb.newsapp.core.platform.NetworkHandler
 import com.deneb.newsapp.core.platform.ServiceKOs
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +16,7 @@ import java.util.*
 interface ArticlesRepository {
 
     fun getArticles(): Either<Failure, List<Article>>
-    fun getArticlesFlow(): Flow<Result<List<Article>>>
-    fun getRemoteArticles(): Either<Failure, List<Article>>
+    fun getArticlesFlow(): Flow<State<List<Article>>>
     fun add(article: ArticleEntity): Either<Failure, Any>
 
     class Network
@@ -32,7 +28,7 @@ interface ArticlesRepository {
         private val shared: SharedPreferences
     ) : ArticlesRepository {
 
-        override fun getRemoteArticles(): Either<Failure, List<Article>> {
+        private fun getRemoteArticles(): Either<Failure, List<Article>> {
             return when (networkHandler.isConnected) {
                 true -> request(
                     service.getArticles(),
@@ -57,26 +53,29 @@ interface ArticlesRepository {
             }
         }
 
-        private suspend fun getRemoteArticlesFlow(): Result<List<Article>> {
-            return when (networkHandler.isConnected) {
-                true -> service.getArticlesFlow().run {
-                    if (isSuccessful && body() != null) {
+        private fun getRemoteArticlesFlow(): State<List<Article>> =
+            when (networkHandler.isConnected) {
+                true -> requestFlow(
+                    service.getArticles(),
+                    {
+                        val articlesList: List<ArticleEntity> = it.articleEntities
+
                         //Guardamos en base de datos la fecha de la actualización
                         fetch.addFetchDate(FetchEntity(0, Date().time))
 
                         //También se pueden utilizar las shared para guardar este dato:
                         shared.edit().putLong("time", Date().time).apply()
 
-                        addAllArticles(body()!!.articleEntities)
-
-                        Success(body()!!.articleEntities.map { it.toArticle() })
-                    } else {
-                        Error(Throwable("Time out"))
-                    }
-                }
-                false, null -> Error(Throwable("network connection"))
+                        addAllArticles(articlesList)
+                        articlesList.map { articleEntity ->
+                            articleEntity.toArticle()
+                        }
+                    },
+                    NewsEntity(emptyList(), "", 0)
+                )
+                false, null -> State.failed(Failure.NetworkConnection())
             }
-        }
+
 
         override fun getArticles(): Either<Failure, List<Article>> {
             return try {
@@ -95,19 +94,21 @@ interface ArticlesRepository {
             }
         }
 
-        override fun getArticlesFlow(): Flow<Result<List<Article>>> {
+        override fun getArticlesFlow(): Flow<State<List<Article>>> {
+            return flow <State<List<Article>>>{
 
-            return flow {
+                emit(State.loading())
+
                 val time = shared.getLong("time", 0L)
                 val articles = local.getArticles()
                 val fetchDate: FetchEntity? = fetch.getFetchDate(0)
                 if (articles.isNullOrEmpty() || fetchDate == null || isFetchCurrentNeeded(fetchDate.fetchData)) {
                     emit(getRemoteArticlesFlow())
                 } else {
-                    emit(Success(local.getArticles().map { it.toArticle() }))
+                    emit(State.success(local.getArticles().map { it.toArticle() }))
                 }
             }.catch {
-                Error(Throwable(ServiceKOs.DATABASE_ACCESS_ERROR.toString()))
+                emit(State.failed<List<Article>>(Failure.CustomError(ServiceKOs.DATABASE_ACCESS_ERROR, "DB Error")))
             }.flowOn(Dispatchers.IO)
 
         }
@@ -142,14 +143,17 @@ interface ArticlesRepository {
             }
         }
 
-        private fun <T, R> requestFlow(call: Call<T>, transform: (T) -> R, default: T): Flow<T> {
-            val response = call.execute()
-            return flow {
+        private fun <T, R> requestFlow(call: Call<T>, transform: (T) -> R, default: T): State<R> {
+            return try {
+                val response = call.execute()
                 when (response.isSuccessful) {
-                    true -> (emit((response.body() ?: default)))
-                    false -> emit(default)
-                }
+                        true -> State.success(transform((response.body() ?: default)))
+                        false -> State.failed(Failure.CustomError(response.code(), response.message()))
+                    }
+            } catch (exception: Throwable) {
+                State.failed(Failure.CustomError(1010101, exception.message?:"An error ocurred"))
             }
+
         }
 
         private fun isFetchCurrentNeeded(lastFetchTime: Long): Boolean {

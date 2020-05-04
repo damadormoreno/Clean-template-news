@@ -1,6 +1,6 @@
 package com.deneb.newsapp.core.functional
 
 interface DialogCallback {
-    fun onAccept()
-    fun onDecline()
+    suspend fun onAccept()
+    suspend fun onDecline()
 }

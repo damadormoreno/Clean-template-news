@@ -13,6 +13,9 @@ import com.deneb.newsapp.core.extensions.observe
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 
@@ -23,10 +26,13 @@ class ArticlesFragment : BaseFragment() {
     private val articleAdapter: ArticleAdapter by inject()
     private val getArticlesViewModel: GetArticlesViewModel by inject()
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(getArticlesViewModel) {
             observe(articles, ::renderArticlesList)
+            observe(loading, ::showLoading)
             failure(failure, ::handleFailure)
         }
     }
@@ -35,7 +41,7 @@ class ArticlesFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
         initListeners()
-        loadArticles()
+        uiScope.launch { loadArticles() }
     }
 
     private fun initializeView() {
@@ -54,7 +60,8 @@ class ArticlesFragment : BaseFragment() {
         articleAdapter.clickListener = { articleView ->
             val bundle = Bundle()
             bundle.putSerializable("article", articleView)
-            view?.findNavController()?.navigate(R.id.action_articlesFragment_to_articleDetailFragment, bundle)
+            view?.findNavController()
+                ?.navigate(R.id.action_articlesFragment_to_articleDetailFragment, bundle)
         }
 
         searchBarProfiles.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -69,9 +76,8 @@ class ArticlesFragment : BaseFragment() {
         })
     }
 
-    private fun loadArticles() {
-        showProgress()
-        getArticlesViewModel.getArticles()
+    private suspend fun loadArticles() {
+        getArticlesViewModel.getArticlesFlow()
     }
 
     private fun renderArticlesList(articles: List<ArticleView>?) {
@@ -79,27 +85,32 @@ class ArticlesFragment : BaseFragment() {
         hideProgress()
     }
 
+    private fun showLoading(show: Boolean?) {
+        when (show!!) {
+            true -> showProgress()
+            false -> hideProgress()
+        }
+
+
+    }
+
     private fun handleFailure(failure: Failure?) {
-        when(failure) {
+        when (failure) {
             is Failure.CustomError -> renderFailure(failure.errorCode, failure.errorMessage)
             else -> renderFailure(0, "")
         }
     }
 
     private fun renderFailure(errorCode: Int, errorMessage: String?) {
-        hideProgress()
         showError(errorCode, errorMessage, object : DialogCallback {
-            override fun onAccept() {
+            override suspend fun onAccept() {
                 loadArticles()
             }
 
-            override fun onDecline() {
+            override suspend fun onDecline() {
                 onBackPressed()
             }
         })
     }
 
 }
-//https://www.artistapirata.com/?s=photoshop
-//https://www.youtube.com/watch?v=P35hQOsW0xU
-//
