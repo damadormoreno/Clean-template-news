@@ -14,9 +14,7 @@ import retrofit2.Call
 import java.util.*
 
 interface ArticlesRepository {
-
-    fun getArticles(): Either<Failure, List<Article>>
-    fun getArticlesFlow(): Flow<State<List<Article>>>
+    fun getArticles(): Flow<Either<Failure, List<Article>>>
     fun add(article: ArticleEntity): Either<Failure, Any>
 
     class Network
@@ -53,62 +51,19 @@ interface ArticlesRepository {
             }
         }
 
-        private fun getRemoteArticlesFlow(): State<List<Article>> =
-            when (networkHandler.isConnected) {
-                true -> requestFlow(
-                    service.getArticles(),
-                    {
-                        val articlesList: List<ArticleEntity> = it.articleEntities
-
-                        //Guardamos en base de datos la fecha de la actualización
-                        fetch.addFetchDate(FetchEntity(0, Date().time))
-
-                        //También se pueden utilizar las shared para guardar este dato:
-                        shared.edit().putLong("time", Date().time).apply()
-
-                        addAllArticles(articlesList)
-                        articlesList.map { articleEntity ->
-                            articleEntity.toArticle()
-                        }
-                    },
-                    NewsEntity(emptyList(), "", 0)
-                )
-                false, null -> State.failed(Failure.NetworkConnection())
-            }
-
-
-        override fun getArticles(): Either<Failure, List<Article>> {
-            return try {
-                val time = shared.getLong("time", 0L)
-                val articles = local.getArticles()
-                val fetchDate: FetchEntity? = fetch.getFetchDate(0)
-                if (articles.isNullOrEmpty() || fetchDate == null || isFetchCurrentNeeded(fetchDate.fetchData)) {
-                    getRemoteArticles()
-                } else {
-                    Either.Right(local.getArticles().map {
-                        it.toArticle()
-                    })
-                }
-            } catch (e: Exception) {
-                Either.Left(Failure.CustomError(ServiceKOs.DATABASE_ACCESS_ERROR, e.message))
-            }
-        }
-
-        override fun getArticlesFlow(): Flow<State<List<Article>>> {
-            return flow <State<List<Article>>>{
-
-                emit(State.loading())
+        override fun getArticles(): Flow<Either<Failure, List<Article>>> {
+            return flow <Either<Failure, List<Article>>>{
 
                 val time = shared.getLong("time", 0L)
                 val articles = local.getArticles()
                 val fetchDate: FetchEntity? = fetch.getFetchDate(0)
                 if (articles.isNullOrEmpty() || fetchDate == null || isFetchCurrentNeeded(fetchDate.fetchData)) {
-                    emit(getRemoteArticlesFlow())
+                    emit(getRemoteArticles())
                 } else {
-                    emit(State.success(local.getArticles().map { it.toArticle() }))
+                    emit(Either.Right(local.getArticles().map { it.toArticle() }))
                 }
             }.catch {
-                emit(State.failed<List<Article>>(Failure.CustomError(ServiceKOs.DATABASE_ACCESS_ERROR, "DB Error")))
+                emit(Either.Left(Failure.CustomError(ServiceKOs.DATABASE_ACCESS_ERROR, "DB Error")))
             }.flowOn(Dispatchers.IO)
 
         }
@@ -136,24 +91,11 @@ interface ArticlesRepository {
                 val response = call.execute()
                 when (response.isSuccessful) {
                     true -> Either.Right(transform((response.body() ?: default)))
-                    false -> Either.Left(Failure.ServerError())
+                    false -> Either.Left(Failure.CustomError(response.code(), response.message()))
                 }
             } catch (exception: Throwable) {
                 Either.Left(Failure.ServerError())
             }
-        }
-
-        private fun <T, R> requestFlow(call: Call<T>, transform: (T) -> R, default: T): State<R> {
-            return try {
-                val response = call.execute()
-                when (response.isSuccessful) {
-                        true -> State.success(transform((response.body() ?: default)))
-                        false -> State.failed(Failure.CustomError(response.code(), response.message()))
-                    }
-            } catch (exception: Throwable) {
-                State.failed(Failure.CustomError(1010101, exception.message?:"An error ocurred"))
-            }
-
         }
 
         private fun isFetchCurrentNeeded(lastFetchTime: Long): Boolean {

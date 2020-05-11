@@ -26,7 +26,7 @@ android {
     viewBinding {
         enabled = true
     }
-    
+
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'
@@ -84,7 +84,7 @@ dependencies {
     compileOnly "javax.annotation:jsr250-api:1.0"
     compileOnly "javax.inject:javax.inject:1"
 
-    implementation "org.jetbrains.anko:anko:0.10.4"
+    implementation "org.jetbrains.anko:anko:0.10.8"
 
     implementation "com.github.bumptech.glide:glide:4.11.0"
 

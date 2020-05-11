@@ -18,4 +18,9 @@
             android:id="@+id/articleDetailFragment"
             android:name="com.deneb.newsapp.features.news.ArticleDetailFragment"
             android:label="ArticleDetailFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.deneb.newsapp.features.favorites.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
 </navigation>

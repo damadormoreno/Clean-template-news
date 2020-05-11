@@ -3,7 +3,6 @@ package com.deneb.newsapp.core.extensions
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
 import android.os.Build
 
 fun Context.checkNetworkState(): Boolean {

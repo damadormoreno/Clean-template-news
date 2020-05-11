@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.currentScope
 
 class ArticlesFragment : BaseFragment() {
 
@@ -77,7 +76,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private suspend fun loadArticles() {
-        getArticlesViewModel.getArticlesFlow()
+        getArticlesViewModel.getArticles()
     }
 
     private fun renderArticlesList(articles: List<ArticleView>?) {
@@ -86,7 +85,7 @@ class ArticlesFragment : BaseFragment() {
     }
 
     private fun showLoading(show: Boolean?) {
-        when (show!!) {
+        when (show) {
             true -> showProgress()
             false -> hideProgress()
         }
@@ -104,7 +103,7 @@ class ArticlesFragment : BaseFragment() {
     private fun renderFailure(errorCode: Int, errorMessage: String?) {
         showError(errorCode, errorMessage, object : DialogCallback {
             override suspend fun onAccept() {
-                loadArticles()
+                uiScope.launch { loadArticles() }
             }
 
             override suspend fun onDecline() {

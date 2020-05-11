@@ -1,40 +1,42 @@
 package com.deneb.newsapp.features.news
 
 import androidx.lifecycle.MutableLiveData
-import com.deneb.newsapp.core.exception.Failure
-import com.deneb.newsapp.core.functional.State
+import com.deneb.newsapp.core.functional.map
 import com.deneb.newsapp.core.interactor.UseCaseFlow
 import com.deneb.newsapp.core.platform.BaseViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import java.util.*
 
+@ExperimentalCoroutinesApi
 class GetArticlesViewModel
-    (private val getArticles: GetArticlesFlow) : BaseViewModel() {
+    (
+    private val getArticles: GetArticles
+) : BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
     var articlesViews: List<ArticleView> = listOf()
     var loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    suspend fun getArticlesFlow() {
+
+    suspend fun getArticles() {
         getArticles.invoke(UseCaseFlow.None())
-            .collect { state ->
-            when(state) {
-                is State.Loading -> loading.value = true //ShowLoading, un livedata?
-                is State.Failed -> {
-                    loading.value = false
-                    handleFailure(state.failure)
+            .onStart { loading.value = true }
+            .onEach { loading.value = false }
+            .map { either ->
+                either.map { list ->
+                    list.map { article ->
+                        article.toArticleView()
+                    }
                 }
-                is State.Success -> handleArticlesList(state.data)
             }
-        }
+            .collect {
+                it.fold(::handleFailure, ::handleArticlesList)
+            }
     }
 
-    private fun handleArticlesList(articles: List<Article>) {
-        loading.value = false
-        articlesViews = articles.map {
-            it.toArticleView()
-        }
-        this.articles.value = articlesViews
+    private fun handleArticlesList(articles: List<ArticleView>) {
+        this.articles.value = articles
     }
 
     fun filter(string: String) {
