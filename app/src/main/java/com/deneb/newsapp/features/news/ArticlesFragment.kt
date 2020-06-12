@@ -13,19 +13,27 @@ import com.deneb.newsapp.core.extensions.observe
 import com.deneb.newsapp.core.functional.DialogCallback
 import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
-import org.koin.android.scope.currentScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
+@ExperimentalCoroutinesApi
 class ArticlesFragment : BaseFragment() {
 
     override fun layoutId() = R.layout.fragment_articles
 
-    private val articleAdapter: ArticleAdapter by currentScope.inject()
-    private val getArticlesViewModel: GetArticlesViewModel by currentScope.inject()
+    private val articleAdapter: ArticleAdapter by inject()
+    private val getArticlesViewModel: GetArticlesViewModel by inject()
+
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(getArticlesViewModel) {
             observe(articles, ::renderArticlesList)
+            observe(loading, ::showLoading)
             failure(failure, ::handleFailure)
         }
     }
@@ -34,7 +42,7 @@ class ArticlesFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
         initListeners()
-        loadArticles()
+        uiScope.launch { loadArticles() }
     }
 
     private fun initializeView() {
@@ -53,7 +61,8 @@ class ArticlesFragment : BaseFragment() {
         articleAdapter.clickListener = { articleView ->
             val bundle = Bundle()
             bundle.putSerializable("article", articleView)
-            view?.findNavController()?.navigate(R.id.action_articlesFragment_to_articleDetailFragment, bundle)
+            view?.findNavController()
+                ?.navigate(R.id.action_articlesFragment_to_articleDetailFragment, bundle)
         }
 
         searchBarProfiles.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -68,37 +77,40 @@ class ArticlesFragment : BaseFragment() {
         })
     }
 
-    private fun loadArticles() {
-        showProgress()
+    private suspend fun loadArticles() {
         getArticlesViewModel.getArticles()
     }
 
     private fun renderArticlesList(articles: List<ArticleView>?) {
         articleAdapter.collection = articles.orEmpty()
-        hideProgress()
+    }
+
+    private fun showLoading(show: Boolean?) {
+        when (show) {
+            true -> showProgress()
+            false -> hideProgress()
+        }
+
+
     }
 
     private fun handleFailure(failure: Failure?) {
-        when(failure) {
+        when (failure) {
             is Failure.CustomError -> renderFailure(failure.errorCode, failure.errorMessage)
             else -> renderFailure(0, "")
         }
     }
 
     private fun renderFailure(errorCode: Int, errorMessage: String?) {
-        hideProgress()
         showError(errorCode, errorMessage, object : DialogCallback {
-            override fun onAccept() {
-                loadArticles()
+            override suspend fun onAccept() {
+                uiScope.launch { loadArticles() }
             }
 
-            override fun onDecline() {
+            override suspend fun onDecline() {
                 onBackPressed()
             }
         })
     }
 
 }
-//https://www.artistapirata.com/?s=photoshop
-//https://www.youtube.com/watch?v=P35hQOsW0xU
-//

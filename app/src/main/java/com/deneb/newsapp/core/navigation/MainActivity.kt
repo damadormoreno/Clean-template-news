@@ -3,11 +3,14 @@ package com.deneb.newsapp.core.navigation
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.deneb.newsapp.R
 import com.deneb.newsapp.core.functional.DialogCallback
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.navigation_activity.*
 
 class MainActivity : AppCompatActivity(), PopUpDelegator {
@@ -18,24 +21,33 @@ class MainActivity : AppCompatActivity(), PopUpDelegator {
         setContentView(R.layout.navigation_activity)
 
         setSupportActionBar(toolbar)
-        val navController = findNavController(R.id.nav_host_fragment)
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+        val navController = host.navController
+
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        setupBottomNavMenu(navController)
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             toolbar.title = when (destination.id) {
                 R.id.articlesFragment -> "News"
                 R.id.articleDetailFragment -> "Details"
+                R.id.favoritesFragment -> "Favorites"
                 else -> "News"
             }
             //Controlamos que al cambiar de fragment no siga nuestro progress activo
             if (progress.visibility == View.VISIBLE) progress.visibility = View.GONE
-
         }
+    }
+
+    private fun setupBottomNavMenu(navController: NavController) {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNav?.setupWithNavController(navController)
     }
 
     override fun showErrorWithRetry(

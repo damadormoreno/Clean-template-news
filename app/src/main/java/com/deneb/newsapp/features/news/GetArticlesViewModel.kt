@@ -1,30 +1,51 @@
 package com.deneb.newsapp.features.news
 
 import androidx.lifecycle.MutableLiveData
+import com.deneb.newsapp.core.functional.map
+import com.deneb.newsapp.core.interactor.UseCaseFlow
 import com.deneb.newsapp.core.platform.BaseViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import java.util.*
 
+@ExperimentalCoroutinesApi
 class GetArticlesViewModel
-(private val getArticles: GetArticles): BaseViewModel() {
+    (
+    private val getArticles: GetArticles
+) : BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
-    var articlesViews: List<ArticleView> = listOf()
+    private var articlesViews: List<ArticleView> = listOf()
+    var loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getArticles() = getArticles.invoke(
-        GetArticles.Params()) {
-            it.fold(::handleFailure, ::handleArticlesList)
-        }
 
-    private fun handleArticlesList(articles: List<Article>) {
-        articlesViews = articles.map {
-            it.toArticleView()
-        }
-        this.articles.value = articlesViews
+    suspend fun getArticles() {
+        getArticles.invoke(UseCaseFlow.None())
+            .onStart { loading.value = true }
+            .onEach { loading.value = false }
+            .map { either ->
+                either.map { list ->
+                    list.map { article ->
+                        article.toArticleView()
+                    }
+                }
+            }
+            .collect {
+                it.fold(::handleFailure, ::handleArticlesList)
+            }
+    }
+
+    private fun handleArticlesList(articles: List<ArticleView>) {
+        this.articles.value = articles
+        articlesViews = articles
     }
 
     fun filter(string: String) {
-        val articlesTempList : MutableList<ArticleView> = mutableListOf()
+        val articlesTempList: MutableList<ArticleView> = mutableListOf()
         for (article in articlesViews) {
-            if (article.title.toLowerCase().contains(string.toLowerCase())) {
+            if (article.title.toLowerCase(Locale.getDefault())
+                    .contains(string.toLowerCase(Locale.getDefault()))
+            ) {
                 articlesTempList.add(article)
             }
         }

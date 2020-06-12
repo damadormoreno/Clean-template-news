@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GitMio-newsapp-esqueleto.iml" filepath="$PROJECT_DIR$/GitMio-newsapp-esqueleto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Repos-newsapp-esqueleto.iml" filepath="$PROJECT_DIR$/Repos-newsapp-esqueleto.iml" group="newsapp-esqueleto" />
+      <module fileurl="file://$PROJECT_DIR$/app/Repos-newsapp-esqueleto-app.iml" filepath="$PROJECT_DIR$/app/Repos-newsapp-esqueleto-app.iml" group="newsapp-esqueleto/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/newsapp-esqueleto.iml" filepath="$PROJECT_DIR$/newsapp-esqueleto.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/newsapp-esqueleto-app.iml" filepath="$PROJECT_DIR$/app/newsapp-esqueleto-app.iml" />
