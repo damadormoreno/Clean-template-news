@@ -15,9 +15,11 @@ import com.deneb.newsapp.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_articles.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
+@ExperimentalCoroutinesApi
 class ArticlesFragment : BaseFragment() {
 
     override fun layoutId() = R.layout.fragment_articles
@@ -81,7 +83,6 @@ class ArticlesFragment : BaseFragment() {
 
     private fun renderArticlesList(articles: List<ArticleView>?) {
         articleAdapter.collection = articles.orEmpty()
-        hideProgress()
     }
 
     private fun showLoading(show: Boolean?) {

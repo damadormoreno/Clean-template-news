@@ -15,7 +15,7 @@ class GetArticlesViewModel
 ) : BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
-    var articlesViews: List<ArticleView> = listOf()
+    private var articlesViews: List<ArticleView> = listOf()
     var loading: MutableLiveData<Boolean> = MutableLiveData()
 
 
@@ -37,6 +37,7 @@ class GetArticlesViewModel
 
     private fun handleArticlesList(articles: List<ArticleView>) {
         this.articles.value = articles
+        articlesViews = articles
     }
 
     fun filter(string: String) {

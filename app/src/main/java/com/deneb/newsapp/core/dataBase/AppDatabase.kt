@@ -15,23 +15,4 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun articleEntityDao(): ArticleDAO
     abstract fun fetchEntityDao(): FetchDateDAO
 
-    companion object {
-        private var INSTANCE: AppDatabase? = null
-
-        fun getAppDataBase(context: Context): AppDatabase? {
-            if (INSTANCE == null) {
-                synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                        AppDatabase::class.java,
-                        "newsDB")
-                        .build()
-                }
-            }
-            return INSTANCE
-        }
-
-        fun destroyDataBase() {
-            INSTANCE = null
-        }
-    }
 }
