@@ -7,10 +7,10 @@ import javax.inject.Singleton
 
 
 class FetchLocal
-(contextHandler: ContextHandler): FetchDbLocal {
+(contextHandler: ContextHandler, appDatabase: AppDatabase): FetchDbLocal {
 
     private val fetchDb by lazy {
-        AppDatabase.getAppDataBase(contextHandler.appContext)?.fetchEntityDao()!!
+        appDatabase.fetchEntityDao()
     }
 
     override fun getFetchDate(id: Int): FetchEntity = fetchDb.getFetchDataById(id)

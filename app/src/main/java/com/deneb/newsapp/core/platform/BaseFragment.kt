@@ -67,8 +67,8 @@ abstract class BaseFragment: androidx.fragment.app.Fragment() {
             getString(R.string.Retry),
             getString(R.string.Cancel),
             object : DialogCallback {
-                override fun onDecline() = dialogCallback.onDecline()
-                override fun onAccept() = dialogCallback.onAccept()
+                override suspend fun onDecline() = dialogCallback.onDecline()
+                override suspend fun onAccept() = dialogCallback.onAccept()
             })
     }
 }
