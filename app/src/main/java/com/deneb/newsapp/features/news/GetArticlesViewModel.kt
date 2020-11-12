@@ -11,7 +11,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 class GetArticlesViewModel
     (
-    private val getArticles: GetArticles
+    private val getArticles: GetArticlesFlow
 ) : BaseViewModel() {
 
     var articles: MutableLiveData<List<ArticleView>> = MutableLiveData()
@@ -20,7 +20,7 @@ class GetArticlesViewModel
 
 
     suspend fun getArticles() {
-        getArticles.invoke(UseCaseFlow.None())
+        getArticles.invoke(Any())
             .onStart { loading.value = true }
             .onEach { loading.value = false }
             .map { either ->

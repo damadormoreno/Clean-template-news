@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="newsapp-esqueleto/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.iml" filepath="$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.iml" group="newsapp-esqueleto" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.iml" filepath="$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/newsapp-esqueleto.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/newsapp-esqueleto.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/newsapp-esqueleto.buildSrc.iml" />
     </modules>
   </component>
 </project>

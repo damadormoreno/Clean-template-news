@@ -1,5 +1,7 @@
 package com.deneb.newsapp.core.interactor
 
+import com.deneb.newsapp.core.exception.Failure
+import com.deneb.newsapp.core.functional.Either
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -15,11 +17,11 @@ import com.deneb.newsapp.core.functional.Result
 abstract class FlowUseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 
     @ExperimentalCoroutinesApi
-    operator fun invoke(parameters: P): Flow<Result<R>> {
+    operator fun invoke(parameters: P): Flow<Either<Failure, R>> {
         return execute(parameters)
-            .catch { e -> emit(Result.Error(Exception(e))) }
+            .catch { e -> emit(Either.Left(Failure.CustomError(10101, e.message?:""))) }
             .flowOn(coroutineDispatcher)
     }
 
-    abstract fun execute(parameters: P): Flow<Result<R>>
+    abstract fun execute(parameters: P): Flow<Either<Failure, R>>
 }
